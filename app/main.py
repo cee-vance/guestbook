@@ -1,17 +1,21 @@
 from fastapi import FastAPI, Request, Depends, Form, Query
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.database import engine, SessionLocal  # Absolute import
 from app import models  # Absolute import
+
+from pathlib import Path
+from fastapi.templating import Jinja2Templates
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Automatically create database tables on startup
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Cloud Guestbook")
 
-templates = Jinja2Templates(directory="templates")
 
 
 def get_db():
@@ -22,9 +26,13 @@ def get_db():
         db.close()
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 def read_home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        request=request, 
+        name="index.html", 
+        context={"request": request}
+    )
 
 
 @app.post("/sign")
