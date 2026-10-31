@@ -43,6 +43,7 @@ def sign_guestbook(name: str = Form(...), db: Session = Depends(get_db)):
     return RedirectResponse(url="/list", status_code=303)
 
 
+
 @app.get("/list", response_class=HTMLResponse)
 def list_entries(
         request: Request,
@@ -55,15 +56,26 @@ def list_entries(
     total_entries = db.query(models.GuestbookEntry).count()
 
     return templates.TemplateResponse(
-        "list.html",
-        {
-            "request": request,
+        request=request,
+        name="list.html",
+        context={
             "entries": entries,
             "limit": limit,
             "offset": offset,
             "total_entries": total_entries
         }
     )
+
+
+@app.post("/sign")
+def sign_guestbook(name: str = Form(...), db: Session = Depends(get_db)):
+    entry = models.GuestbookEntry(name=name)
+    db.add(entry)
+    db.commit()
+    return RedirectResponse(url="/list", status_code=303)
+
+
+
 
 
 @app.get(path="/health")

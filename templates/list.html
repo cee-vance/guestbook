@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guestbook Entries - Cloud Guestbook</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .container {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: #111;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            font-weight: 600;
+            color: #555;
+            background-color: #fafafa;
+        }
+        tr:hover {
+            background-color: #fcfcfc;
+        }
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 2rem 0;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .pagination a {
+            padding: 0.5rem 1rem;
+            background-color: #0070f3;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .pagination a:hover {
+            background-color: #0051bb;
+        }
+        .pagination a.disabled {
+            background-color: #ccc;
+            pointer-events: none;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #0070f3;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guestbook Entries</h1>
+
+        {% if entries %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Signed At (UTC)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ entry.name }}</td>
+                            <td>{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                {% if offset > 0 %}
+                    <a href="/list?limit={{ limit }}&offset={{ [0, offset - limit]|max }}">← Previous</a>
+                {% else %}
+                    <a class="disabled" href="#">← Previous</a>
+                {% endif %}
+
+                <span>Showing {{ offset + 1 }} - {{ [offset + limit, total_entries]|min }} of {{ total_entries }}</span>
+
+                {% if offset + limit < total_entries %}
+                    <a href="/list?limit={{ limit }}&offset={{ offset + limit }}">Next →</a>
+                {% else %}
+                    <a class="disabled" href="#">Next →</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="empty">
+                <p>No signatures yet. Be the first to sign!</p>
+            </div>
+        {% endif %}
+
+        <a class="back-link" href="/">← Back to Sign Guestbook</a>
+    </div>
+</body>
+</html>
