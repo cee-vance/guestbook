@@ -19,6 +19,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /path/to/your/guestbook
+            cd /home/ec2-user/guestbook
             git pull origin main
             docker compose up -d --build --force-recreate web
