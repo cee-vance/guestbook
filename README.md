@@ -17,7 +17,7 @@ The guestbook application provides a clean RESTful interface for visitors to lea
 You can test the health check endpoint locally with `curl`:
 
 ```bash
-curl -X GET http://localhost:8000/health
+curl -X GET https://44.254.53.57.sslip.io/health
 ```
 
 ## Architecture Overview
