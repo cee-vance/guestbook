@@ -8,8 +8,8 @@ A full-stack guestbook application built with FastAPI, PostgreSQL, and Docker Co
 
 The guestbook application provides a clean RESTful interface for visitors to leave messages, view past entries, and verify system status (running temporarily at [Cloud Guestbook Root](https://44.254.53.57.sslip.io):
 
-- **Sign Guestbook:** Submit a new entry via `POST` at `/entries` or `/sign`.
-- **View Guestbook:** Retrieve and display all recorded guestbook entries via `GET` at `/entries`.
+- **Sign Guestbook:** Submit a new entry via `POST` at  `/sign`.
+- **View Guestbook:** Retrieve and display all recorded guestbook entries via `GET` at `/list`.
 - **Health Check API:** Verify that the FastAPI application and database connection are fully operational.
 
 ### API Endpoints & Health Check
