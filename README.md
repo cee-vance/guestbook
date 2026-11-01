@@ -60,11 +60,10 @@ For local development, only the core application and database services are requi
    ```bash
    git clone https://github.com/cee-vance/guestbook.git
    cd guestbook
-   docker compose up -d web db
    
 2. **Build the container:**
    ```bash
-   docker compose up -d web db
+   docker compose up  web db
    
 3. **Navigate to the app running on Development Server:**
    http://localhost:8000
