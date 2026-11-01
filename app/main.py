@@ -7,23 +7,32 @@ from app import models  # Absolute import
 
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
+from contextlib import asynccontextmanager
+from pathlib import Path
+from fastapi import FastAPI, Depends
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+
+from app.database import engine, Base, SessionLocal, get_db
+from app import models
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # This safely creates tables on startup in production
+    Base.metadata.create_all(bind=engine)
+    yield
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Automatically create database tables on startup
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Cloud Guestbook")
 
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.get("/")
